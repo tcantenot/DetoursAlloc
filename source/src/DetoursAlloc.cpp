@@ -101,7 +101,7 @@ class DbgHelper
 
 		using CallstackWalker = void(*)(CallstackFrameInfo const & info, void * userdata);
 
-		static void WallCallstack(CallstackFrames const & callstackFrames, uint16_t frameStart, uint16_t frameCount, CallstackWalker walker, void * userdata = nullptr)
+		static void WalkCallstack(CallstackFrames const & callstackFrames, uint16_t frameStart, uint16_t frameCount, CallstackWalker walker, void * userdata = nullptr)
 		{
 			const HANDLE process = Instance().m_process;
 
@@ -150,7 +150,7 @@ class DbgHelper
 			CallstackFrames callstackFrames;
 			const uint16_t callstackFrameCount = GetCallstack(callstackFrames);
 
-			WallCallstack(callstackFrames, 0, callstackFrameCount,
+			WalkCallstack(callstackFrames, 0, callstackFrameCount,
 				[](CallstackFrameInfo const & info, void *)
 				{
 					LOG("  %s(%d): %s", 
@@ -306,7 +306,7 @@ class ValueTracker
 					float(totalValue) * invTotalAllocSizePercent
 				);
 
-				DbgHelper::WallCallstack(entry.frames, 2, entry.frameCount,
+				DbgHelper::WalkCallstack(entry.frames, 2, entry.frameCount,
 					[](CallstackFrameInfo const & info, void *)
 					{
 						LOG("  %s(%d): %s", 
